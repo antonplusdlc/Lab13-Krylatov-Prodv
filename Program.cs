@@ -205,6 +205,29 @@ catch (IndexOutOfRangeException)
     Console.WriteLine("выходит за границы!");
 }
 
+// 2
+
+void CheckAge(int age)
+{
+    if (age < 0 || age > 120) throw new ArgumentException("incorrect age!");
+}
+
+try
+{
+    Console.Write("enter age: ");
+    int age = int.Parse(Console.ReadLine());
+    CheckAge(age);
+    Console.WriteLine("ok");
+}
+catch (FormatException)
+{
+    Console.WriteLine("not int!");
+}
+catch (ArgumentException e)
+{
+    Console.WriteLine(e.Message);
+}
+
 class NegativeBalanceException : Exception
 {
     public NegativeBalanceException(string message) : base(message)
