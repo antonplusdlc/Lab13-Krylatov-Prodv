@@ -183,6 +183,28 @@ do
     }
 } while (!exit);
 
+// ## Самостоятельные задания
+
+// 1
+
+int[] a = [1, 2, 3, 4, 5];
+
+try
+{
+    Console.Write("введи индекс элемента массива: ");
+    int da = int.Parse(Console.ReadLine());
+
+    Console.WriteLine(a[da]);
+}
+catch (FormatException)
+{
+    Console.WriteLine("not int!");
+}
+catch (IndexOutOfRangeException)
+{
+    Console.WriteLine("выходит за границы!");
+}
+
 class NegativeBalanceException : Exception
 {
     public NegativeBalanceException(string message) : base(message)
