@@ -106,16 +106,16 @@ Console.WriteLine("=== Собственное исключение ===");
 
 try
 {
-    Withdraw(1000, 1500);
+    Withdraww(1000, 1500);
 }
 catch (NegativeBalanceException ex)
 {
     Console.WriteLine($"Операция отклонена: {ex.Message}");
 }
 
-Withdraw(1000, 400);
+Withdraww(1000, 400);
 
-void Withdraw(double balance, double amount)
+void Withdraww(double balance, double amount)
 {
     if (amount > balance)
     {
@@ -228,6 +228,68 @@ catch (ArgumentException e)
     Console.WriteLine(e.Message);
 }
 
+// 3
+
+void Deposit(ref double balance, double amount)
+{
+    if (amount <= 0) throw new InvalidAmountException("amount <= 0!");
+
+    balance += amount;
+}
+
+void Withdraw(ref double balance, double amount)
+{
+    if (amount <= 0) throw new InvalidAmountException("amount <= 0!");
+    if (amount > balance) throw new InsufficientFundsException("amount > balance!");
+
+    balance -= amount;
+}
+
+double balance = 1000;
+bool done = false;
+
+do
+{
+    try
+    {
+        Console.WriteLine("1 - deposit\n2 - withdraw\n3 - exit");
+        string oper = Console.ReadLine();
+
+        switch (oper)
+        {
+            case "1":
+                Console.Write("amount: ");
+                Deposit(ref balance, double.Parse(Console.ReadLine()));
+                break;
+            case "2":
+                Console.Write("amount: ");
+                Withdraw(ref balance, double.Parse(Console.ReadLine()));
+                break;
+            case "3":
+                done = true;
+                break;
+            default:
+                throw new UnknownOperationException("unk oper!");
+                break;
+        }
+    }
+    catch (FormatException)
+    {
+        Console.WriteLine("not int!");
+    }
+    catch (InsufficientFundsException e)
+    {
+        Console.WriteLine(e.Message);
+    }
+    catch (InvalidAmountException e)
+    {
+        Console.WriteLine(e.Message);
+    }
+    finally {
+        Console.WriteLine($"balance: {balance}");
+    }
+} while (!done);
+
 class NegativeBalanceException : Exception
 {
     public NegativeBalanceException(string message) : base(message)
@@ -238,4 +300,14 @@ class NegativeBalanceException : Exception
 class UnknownOperationException : Exception
 {
     public UnknownOperationException(string msg) : base(msg) {}
+}
+
+class InsufficientFundsException : Exception
+{
+    public InsufficientFundsException(string msg) : base(msg) {}
+}
+
+class InvalidAmountException : Exception
+{
+    public InvalidAmountException(string msg) : base(msg) {}
 }
