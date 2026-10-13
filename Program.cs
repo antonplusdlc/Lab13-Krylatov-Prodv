@@ -124,9 +124,73 @@ void Withdraw(double balance, double amount)
     Console.WriteLine($"Снято {amount}, остаток {balance - amount}");
 }
 
+// надёжный калькулятор
+
+bool exit = false;
+
+do
+{
+    try
+    {
+        Console.Write("enter first int: ");
+        int first = int.Parse(Console.ReadLine());
+        Console.Write("enter second int: ");
+        int second = int.Parse(Console.ReadLine());
+        Console.Write("enter operation (+ - * /. e for exit): ");
+        string operation = Console.ReadLine();
+
+        switch (operation)
+        {
+            case "+":
+                Console.WriteLine(first + second);
+                break;
+            case "-":
+                Console.WriteLine(first - second);
+                break;
+            case "*":
+                Console.WriteLine(first * second);
+                break;
+            case "/":
+                Console.WriteLine(first / second);
+                break;
+            case "e":
+                exit = true;
+                break;
+            default:
+                throw new UnknownOperationException("Неизвестная операция!");
+                break;
+        }
+    }
+    catch (FormatException)
+    {
+        Console.WriteLine("not int!");
+    }
+    catch (DivideByZeroException)
+    {
+        Console.WriteLine("делить на 0 незя!");
+    }
+    catch (UnknownOperationException e)
+    {
+        Console.WriteLine(e.Message);
+    }
+    catch (Exception)
+    {
+        Console.WriteLine("unk error");
+    }
+    finally
+    {
+        Console.WriteLine(new string('-', 24));
+    }
+} while (!exit);
+
 class NegativeBalanceException : Exception
 {
     public NegativeBalanceException(string message) : base(message)
     {
     }
+}
+
+class UnknownOperationException : Exception
+{
+    public UnknownOperationException(string msg) : base(msg) {}
 }
